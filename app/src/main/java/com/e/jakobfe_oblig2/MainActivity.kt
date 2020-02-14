@@ -8,36 +8,39 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitString
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.runBlocking
 import java.lang.Exception
-import kotlinx.coroutines.runBlocking as runBlocking
 
 class MainActivity : AppCompatActivity() {
 
     private val tag= "MainActivity" // for logging purposes
-    private val baseUrl= "https://data.uio.no/studies/v1/course/IN2000"
+    private val baseUrl= "https://www.uio.no/studier/emner/matnat/ifi/IN2000/v20/obligatoriske-oppgaver/alpakka20.json" // to be reused in other queries
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val gson = Gson()
+
         runBlocking {
             try {
                 val response = Fuel.get(baseUrl).awaitString()
                 Log.d(tag, response)
                 val course = gson.fromJson(response, Array<Alpakka>::class.java).toMutableList()
-                Log.d(tag, course.toString())
-                textView.text = course.get(0).name.toString()
+                val lama1 = course[0]
+                textView.text = "${lama1.name} kommer fra ${lama1.location} og er ${lama1.age} år."
+
             }
             catch (e  : Exception) {
-                // Log.e(tag, e.message)
-                Toast.makeText(this@MainActivity, "could not find course", Toast.LENGTH_SHORT).show()
+                Log.e(tag, e.message)
+                textView.text = "Ingen tilgjengelige lamaer"
+                Toast.makeText(this@MainActivity, "Finner ikke API..", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-}
 
+    }
+
+}
 
 data class Alpakka(val name: String?, val age: String?, val location: String?, val imgSrc: String?)
 
-data class Metadata(val count: Number?, val total: Number?, val offset: Number?, val status: String?, val limit: Number?)
