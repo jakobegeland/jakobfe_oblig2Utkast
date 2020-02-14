@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 //Log.d(sted, kall)
                 val alpakkaListe = gson.fromJson(kall, Array<Alpaca>::class.java).toMutableList()
                 val lama1 = alpakkaListe[0]
-                textView.text = "${lama1.name} kommer fra ${lama1.location} og er ${lama1.age} år."
+               // textView.text = "${lama1.name} kommer fra ${lama1.location} og er ${lama1.age} år."
             }
             catch (e  : Exception) {
                 Toast.makeText(this@MainActivity, "Ingen lamaer tilgjengelig", Toast.LENGTH_SHORT).show()
