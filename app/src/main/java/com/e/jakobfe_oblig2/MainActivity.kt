@@ -21,26 +21,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val gson = Gson()
-
         runBlocking {
             try {
-                val response = Fuel.get(baseUrl).awaitString()
-                Log.d(tag, response)
-                val course = gson.fromJson(response, Array<Alpakka>::class.java).toMutableList()
-                val lama1 = course[0]
+                val kall = Fuel.get(baseUrl).awaitString()
+                Log.d(tag, kall)
+                val alpakkaListe = gson.fromJson(kall, Array<Alpaca>::class.java).toMutableList()
+                val lama1 = alpakkaListe[0]
                 textView.text = "${lama1.name} kommer fra ${lama1.location} og er ${lama1.age} år."
-
             }
             catch (e  : Exception) {
                 Log.e(tag, e.message)
-                textView.text = "Ingen tilgjengelige lamaer"
-                Toast.makeText(this@MainActivity, "Finner ikke API..", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Ingen lamaer tilgjengelig", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-
 }
-
-data class Alpakka(val name: String?, val age: String?, val location: String?, val imgSrc: String?)
 
