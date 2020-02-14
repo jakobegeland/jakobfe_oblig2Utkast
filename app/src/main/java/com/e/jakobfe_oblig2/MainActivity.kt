@@ -13,8 +13,8 @@ import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
-    private val tag= "MainActivity" // for logging purposes
-    private val baseUrl= "https://www.uio.no/studier/emner/matnat/ifi/IN2000/v20/obligatoriske-oppgaver/alpakka20.json" // to be reused in other queries
+    private val sted= "MainActivity" // for logging purposes
+    private val baseUrl= "https://www.uio.no/studier/emner/matnat/ifi/IN2000/v20/obligatoriske-oppgaver/alpakka20.json"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,13 +24,12 @@ class MainActivity : AppCompatActivity() {
         runBlocking {
             try {
                 val kall = Fuel.get(baseUrl).awaitString()
-                Log.d(tag, kall)
+                //Log.d(sted, kall)
                 val alpakkaListe = gson.fromJson(kall, Array<Alpaca>::class.java).toMutableList()
                 val lama1 = alpakkaListe[0]
                 textView.text = "${lama1.name} kommer fra ${lama1.location} og er ${lama1.age} år."
             }
             catch (e  : Exception) {
-                Log.e(tag, e.message)
                 Toast.makeText(this@MainActivity, "Ingen lamaer tilgjengelig", Toast.LENGTH_SHORT).show()
             }
         }
